@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokemon Finder</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+  <script src="scripts.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="navbar">
+      <img src="svg/pokemon-23.svg" alt="pokemon logo" width="249"/>
+    </div>
+      <form action="" class="search" onsubmit="handleClick(event)">
+        <label for="GET-pokemon">Type a pokemon</label>
+        <input id="GET-pokemon" type="text" name="name">
+        <input id="submit" type="submit" value="Find">
+      </form>
+    <div class="card" id="card-color">
+      <div class="card-header">
+        <p id="card-id"></p>
+        <img id="card-img" src="" alt=""/>
+        <p id="card-hp"></p>
+      </div>
+      <div class="grey">
+        <div class="name">
+          <p id="name"></p>
+        </div>
+        <div class="label-stats">
+          <p>Stats</p>
+        </div>
+        <div class="label-stats-ADS">
+          <p>Attack</p>
+          <p>Defense</p>
+          <p>Speed</p>
+        </div>
+        <div class="stats">
+          <p id="attack"></p>
+          <p id="defense"></p>
+          <p id="speed"></p>
+        </div>
+        <div class="line"></div>
+        <div class="label-stats">
+          <p>Type</p>
+        </div>
+        <div class="flex-type" id="types">
+        </div>
+        <div class="line"></div>
+        <div class="info">
+          <div class="info-label">
+            <p>Weight</p>
+            <p>Height</p>
+          </div>
+          <div class="info-data">
+            <p id="weight"></p>
+            <p id="height"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <p>Powered by&nbsp;</p>
+      <img src="https://res.cloudinary.com/dfnqqumsc/image/upload/v1673288746/Portfolio/Pokemon%20finder/pokeapi_256.3fa72200.jpg" alt="pokeapi logo" id="pokeapi"/>
+    </div>
+  </div>
+</body>
+</html>
