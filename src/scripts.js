@@ -75,7 +75,7 @@ const cardColors = [
 
 async function handleClick(e) {
   e.preventDefault()
-  let searching = e.target[0].value.trim()
+  let searching = e.target[0].value.trim().toLowerCase()
   if (searching.length !== 0) {
     let pokemon = await getPokemon(searching)
     if (pokemon !== 'not found') {
