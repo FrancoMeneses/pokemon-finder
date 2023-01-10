@@ -5,9 +5,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pokemon Finder</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
-  <script src="scripts.js"></script>
 </head>
 <body>
   <div class="container">
@@ -16,7 +16,8 @@
     </div>
       <form action="" class="search" onsubmit="handleClick(event)">
         <label for="GET-pokemon">Type a pokemon</label>
-        <input id="GET-pokemon" type="text" name="name">
+        <input id="GET-pokemon" autocomplete="off" type="text" name="name">
+        <ul id="autoCompleteList" class="list"></ul>
         <input id="submit" type="submit" value="Find">
       </form>
     <div class="card" id="card-color">
@@ -66,5 +67,6 @@
       <img src="https://res.cloudinary.com/dfnqqumsc/image/upload/v1673288746/Portfolio/Pokemon%20finder/pokeapi_256.3fa72200.jpg" alt="pokeapi logo" id="pokeapi"/>
     </div>
   </div>
+  <script src="scripts.js"></script>
 </body>
 </html>

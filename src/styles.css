@@ -5,7 +5,7 @@ body {
 }
 
 .navbar {
-  width: 390px;
+  width: 100%;
   height: 100px;
   background: #E73D3D;
   display: flex;
@@ -26,21 +26,42 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 25px;
 }
 
 .search label {
   font-size: 20px;
-  margin: 0;
+  margin-bottom: 20px;
   padding: 0;
 }
+
 #GET-pokemon {
   width: 272px;
   height: 42px;
   background: #D9D9D9;
   border-radius: 5px;
   font-size: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.list {
+  list-style: none;
+  overflow: auto;
+  width: 272px;
+  height: auto;
+  max-height: 165px;
+  background-color: #D9D9D9;
+  border-radius: 0 0 5px 5px;
+  margin: 0;
+  padding: 0;
+}
+
+.list-items {
+  padding: 10px 5px;
+}
+
+.list-items:hover {
+  background-color: #ffffff;
 }
 
 #submit {
@@ -49,6 +70,7 @@ body {
   background: #E73D3D;
   border-radius: 5px;
   font-size: 16px;
+  margin-top: 25px;
 }
 
 .card {
