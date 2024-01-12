@@ -73,13 +73,32 @@ body {
   margin-top: 25px;
 }
 
+.cards-container-style{
+  width: 90%;
+  min-height: 600px;
+  max-width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .card {
   display: none;
   flex-direction: column;
   align-items: center;
   width: 351px;
   height: 535px;
-  background: #DD6C6C;
+  border: 10px solid #E4D22A;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+}
+
+.cardN {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 351px;
+  height: 535px;
   border: 10px solid #E4D22A;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
@@ -91,6 +110,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  pointer-events: none;
 }
 
 .card-header p {
@@ -108,14 +128,14 @@ body {
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
-.grey {
+.pokemon-info {
   width: 316px;
   height: 277px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-
+  pointer-events: none;
 
   background: #D9D9D9;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -220,6 +240,7 @@ body {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin-top: 8px;
   margin-bottom: 8px;
+  border-radius: 2px;
 }
 
 .footer {
@@ -237,4 +258,111 @@ body {
   width: 44px;
   height: 18px;
   filter: opacity(50%);
+}
+
+.previousCard{
+  z-index: 1;
+  filter: blur(5px);
+  transform: rotate(-25deg);
+  margin-right: -200px;
+  cursor: pointer;
+  -webkit-transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+  -o-transition: all 0.5s linear;
+  transition: all 0.5s linear;
+}
+
+.currentCard{
+  z-index: 2;
+  pointer-events: default;
+  -webkit-transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+  -o-transition: all 0.5s linear;
+  transition: all 0.5s linear;
+}
+
+.nextCard{
+  z-index: 1;
+  filter: blur(5px);
+  transform: rotate(25deg);
+  margin-left: -200px;
+  cursor: pointer;
+  -webkit-transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+  -o-transition: all 0.5s linear;
+  transition: all 0.5s linear;
+}
+
+.hiddenCard{
+  display: none;
+  -webkit-transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+  -o-transition: all 0.5s linear;
+  transition: all 0.5s linear;
+}
+
+.mobile-arrows-show {
+  display: none;
+}
+
+.mobile-arrows-hide {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .previousCard{
+    display: none;
+    -webkit-transition: all 0.5s linear;
+    -moz-transition: all 0.5s linear;
+    -o-transition: all 0.5s linear;
+    transition: all 0.5s linear;
+  }
+
+  .nextCard{
+    display: none;
+    -webkit-transition: all 0.5s linear;
+    -moz-transition: all 0.5s linear;
+    -o-transition: all 0.5s linear;
+    transition: all 0.5s linear;
+  }
+
+  .mobile-arrows-hide {
+    display: none;
+  }
+
+  .mobile-arrows-show {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+  }
+  
+  .arrow-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 140px;
+    height: 140px;
+    background-color: transparent;
+    border: 2px solid;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .arrow-button > svg {
+    pointer-events: none;
+    margin-bottom: -20px;
+  }
+
+  .arrow-button > img {
+    pointer-events: none;
+    height: 75px;
+  }
+  
+  .arrow-button > p {
+    pointer-events: none;
+    margin-top: -10px;
+  }
 }

@@ -1212,6 +1212,8 @@ const CARDCOLORS = [
   }
 ]
 
+const SPRITES = []
+
 let input = document.getElementById('GET-pokemon')
 
 input.addEventListener("keyup", (e) => {
@@ -1242,71 +1244,205 @@ function removeElements() {
   })
 }
 
-async function handleClick(e) {
+async function handleNewClick(e) {
   e.preventDefault()
   removeElements()
   let searching = e.target[0].value.trim().toLowerCase()
   if (searching.length !== 0) {
-    let pokemon = await getPokemon(searching)
-    if (pokemon !== 'not found') {
-      let delT = document.getElementById('types')
-      let chil = delT.children.length
-      for (let i = 0; i < chil; i++) {
-        let t = document.getElementById(`p-${i}`)
-        delT.removeChild(t)
+    let pokemons = await getPokemon(searching)
+    if (pokemons !== 'not found') {
+      let mobileArrows = document.getElementById('mobile-arrows')
+      mobileArrows.classList.remove('mobile-arrows-hide')
+      mobileArrows.classList.add('mobile-arrows-show')
+      let container = document.getElementById('cards-container')
+      for (let i = 0; i < pokemons.length; i++) {
+        let [newCard, color] = createCard(pokemons[i])
+        if (i === 0) {
+          newCard.classList.add('previousCard')
+          let mobileInfo = document.getElementById('previous-pokemon')
+          mobileInfo.id = `previous-pokemon-${newCard.id}`
+
+          document.getElementById('previous-button').style.borderColor = color
+          let mobilePP = document.getElementById('previous-button').children[2]
+          mobilePP.innerText = pokemons[0].name.charAt(0).toUpperCase() + pokemons[i].name.slice(1)
+          let pImgP = document.getElementById('default-sprite-p')
+          pImgP.setAttribute('src', pokemons[i].sprites.front_default)
+          pImgP.setAttribute('alt', pokemons[i].name)
+        }
+        if (i === 1) {
+          newCard.classList.add('currentCard')
+        }
+        if (i === 2) {
+          newCard.classList.add('nextCard')
+          let mobileInfo = document.getElementById('next-pokemon')
+          mobileInfo.id = `next-pokemon-${newCard.id}`
+
+          document.getElementById('next-button').style.borderColor = color
+          let mobileNP = document.getElementById('next-button').children[2]
+          mobileNP.innerText = pokemons[2].name.charAt(0).toUpperCase() + pokemons[2].name.slice(1)
+          let pImgN = document.getElementById('default-sprite-n')
+          pImgN.setAttribute('src', pokemons[2].sprites.front_default)
+          pImgN.setAttribute('alt', pokemons[2].name)
+        }
+        container.appendChild(newCard)
       }
-      let types = []
-      for (let i = 0; i < pokemon.types.length; i++) {
-        CARDCOLORS.forEach((pokType) => {
-          if (pokType.type === pokemon.types[i].type.name) {
-            let n = {
-              type: pokemon.types[i].type.name,
-              color: pokType.color
-            }
-            types.push(n)
-          }
-        })
-      }
-      let color = types[0].color
-      let card = document.getElementById("card-color")
-      card.style.background = color
-      let pokemonId = deleteZero(pokemon.id.toString())
-      document.getElementById('card-id').innerText = pokemonId
-      document.getElementById('card-img').setAttribute('src', pokemon.sprites.other['official-artwork'].front_default)
-      document.getElementById('card-img').setAttribute('alt', pokemon.name)
-      document.getElementById('card-hp').innerText = "HP " + pokemon.stats[0].base_stat.toString()
-      document.getElementById('name').innerText = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)
-      document.getElementById('attack').innerText = pokemon.stats[1].base_stat.toString()
-      document.getElementById('defense').innerText = pokemon.stats[2].base_stat.toString()
-      document.getElementById('speed').innerText = pokemon.stats[5].base_stat.toString()
-      for (let i = 0; i < types.length; i++) {
-        let newP = document.createElement('p')
-        newP.className = 'type'
-        newP.innerText = types[i].type.charAt(0).toUpperCase() + types[i].type.slice(1)
-        newP.style.color = '#FFFFFF'
-        newP.style.background = types[i].color
-        newP.id = `p-${i}`
-        document.getElementById('types').appendChild(newP)
-      }
-      document.getElementById('weight').innerText = `${(pokemon.weight / 10).toString()} kg`
-      document.getElementById('height').innerText = `${(pokemon.height / 10).toString()} m`
-      card.style.display = "flex";
-    } else {
-      let card = document.getElementById("card-color")
-      card.style.display = "none";
-      document.getElementById("GET-pokemon").focus()
-      alert("We couldn't find this pokemon, did you type it correctly?")
     }
+  }
+}
+
+function handleMoveCards(e) {
+  let card = e.target
+  let nameClass = card.classList[1]
+  if (nameClass === 'previousCard') {
+    card.classList.remove('previousCard')
+    card.classList.add('currentCard')
+    previousCardTransition(card, card.id)
+  }
+  if (nameClass === 'nextCard') {
+    card.classList.remove('nextCard')
+    card.classList.add('currentCard')
+    nextCardTransition(card, card.id)
+  }
+}
+
+function handleMobileButtons(e) {
+  if (e.target.id === 'previous-button') {
+    let pokemonId = e.target.children[2].id.split('-')[2]
+    let card = document.getElementById(pokemonId)
+    // card.classList.remove('previousCard')
+    // card.classList.add('currentCard')
+    previousCardTransition(card, pokemonId)
+  }
+  if (e.target.id === 'next-button') {
+    let pokemonId = e.target.children[2].id.split('-')[2]
+    let card = document.getElementById(pokemonId)
+    // card.classList.remove('nextCard')
+    // card.classList.add('currentCard')
+    nextCardTransition(card, pokemonId)
+  }
+}
+
+async function previousCardTransition(element, id) {
+  let intId = parseInt(id)
+  let isPokemon = document.getElementById(intId - 1)
+  if (isPokemon === null) {
+    let newPokemon = await getOnePokemonById((intId - 1))
+    let [newCard, color] = createCard(newPokemon)
+    newCard.classList.add('previousCard')
+
+    let cardsContainer = document.getElementById('cards-container')
+    cardsContainer.insertBefore(newCard, element)
   } else {
-    alert('You must type a pokemon')
+    isPokemon.classList.remove('hiddenCard')
+    isPokemon.classList.add('cardN', 'previousCard')
+  }
+
+  let btnMobileP = document.getElementById('previous-button')
+  let infoPP = SPRITES.find(p => {
+    return p.id === (intId - 1)
+  })
+  btnMobileP.style.borderColor = infoPP.color
+  btnMobileP.children[1].setAttribute('src', infoPP.url)
+  btnMobileP.children[1].setAttribute('alt', infoPP.name.charAt(0).toUpperCase() + infoPP.name.slice(1))
+  btnMobileP.children[2].id = `previous-pokemon-${(intId - 1)}`
+  btnMobileP.children[2].innerText = infoPP.name.charAt(0).toUpperCase() + infoPP.name.slice(1)
+
+  let btnMobileN = document.getElementById('next-button')
+  let infoPN = SPRITES.find(p => {
+    return p.id === (intId + 1)
+  })
+  btnMobileN.style.borderColor = infoPN.color
+  btnMobileN.children[1].setAttribute('src', infoPN.url)
+  btnMobileN.children[1].setAttribute('alt', infoPN.name.charAt(0).toUpperCase() + infoPN.name.slice(1))
+  btnMobileN.children[2].id = `previous-pokemon-${(intId + 1)}`
+  btnMobileN.children[2].innerText = infoPN.name.charAt(0).toUpperCase() + infoPN.name.slice(1)
+
+  element.classList.remove('previousCard')
+  element.classList.add('currentCard')
+
+  let lastCurrent = document.getElementById((intId + 1))
+  lastCurrent.classList.remove('currentCard')
+  lastCurrent.classList.add('nextCard')
+
+  let lastNextCard = document.getElementById((intId + 2))
+  lastNextCard.classList.remove('nextCard')
+  lastNextCard.classList.remove('currentCard')
+  lastNextCard.classList.remove('cardN')
+  lastNextCard.classList.add('hiddenCard')
+}
+
+async function nextCardTransition(element, id) {
+  let intId = parseInt(id)
+  let isPokemon = document.getElementById(intId + 1)
+  if (isPokemon === null) {
+    let newPokemon = await getOnePokemonById((intId + 1))
+    let [newCard, color] = createCard(newPokemon)
+    newCard.classList.add('nextCard')
+
+    let cardsContainer = document.getElementById('cards-container')
+    cardsContainer.appendChild(newCard)
+  } else {
+    isPokemon.classList.remove('hiddenCard')
+    isPokemon.classList.add('cardN', 'nextCard')
+  }
+
+  let btnMobileN = document.getElementById('next-button')
+  let infoPN = SPRITES.find(p => {
+    return p.id === (intId + 1)
+  })
+  btnMobileN.style.borderColor = infoPN.color
+  btnMobileN.children[1].setAttribute('src', infoPN.url)
+  btnMobileN.children[1].setAttribute('alt', infoPN.name.charAt(0).toUpperCase() + infoPN.name.slice(1))
+  btnMobileN.children[2].id = `previous-pokemon-${(intId + 1)}`
+  btnMobileN.children[2].innerText = infoPN.name.charAt(0).toUpperCase() + infoPN.name.slice(1)
+
+  let btnMobileP = document.getElementById('previous-button')
+  let infoPP = SPRITES.find(p => {
+    return p.id === (intId - 1)
+  })
+  btnMobileP.style.borderColor = infoPP.color
+  btnMobileP.children[1].setAttribute('src', infoPP.url)
+  btnMobileP.children[1].setAttribute('alt', infoPP.name.charAt(0).toUpperCase() + infoPP.name.slice(1))
+  btnMobileP.children[2].id = `previous-pokemon-${(intId - 1)}`
+  btnMobileP.children[2].innerText = infoPP.name.charAt(0).toUpperCase() + infoPP.name.slice(1)
+
+  element.classList.remove('nextCard')
+  element.classList.add('currentCard')
+
+  let lastCurrent = document.getElementById((intId - 1))
+  lastCurrent.classList.remove('currentCard')
+  lastCurrent.classList.add('previousCard')
+
+  let lastPreviousCard = document.getElementById((intId - 2))
+  lastPreviousCard.classList.remove('previousCard')
+  lastPreviousCard.classList.remove('currentCard')
+  lastPreviousCard.classList.remove('cardN')
+  lastPreviousCard.classList.add('hiddenCard')
+}
+
+async function getOnePokemonById(id) {
+  try {
+    let res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+    let newPokemon = await res.json()
+    return newPokemon
+  }
+  catch (error) {
+    return 'not found'
   }
 }
 
 async function getPokemon(name) {
   try {
     let res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
-    let data = await res.json()
-    return data
+    let currentlyPokemon = await res.json()
+    const { id } = currentlyPokemon
+    let [previousPokemonRes, nextPokemonRes] = await Promise.all([
+      fetch(`https://pokeapi.co/api/v2/pokemon/${(id - 1)}`),
+      fetch(`https://pokeapi.co/api/v2/pokemon/${(id + 1)}`)
+    ])
+    let previousPokemon = await previousPokemonRes.json()
+    let nextPokemon = await nextPokemonRes.json()
+    return [previousPokemon, currentlyPokemon, nextPokemon]
   } catch (error) {
     return 'not found'
   }
@@ -1325,4 +1461,173 @@ function deleteZero(id) {
     case 5:
       return `#${id.charAt(0) + id.slice(2)}`
   }
+}
+
+// Le pasamos el pokemon
+function createCard(pokemon) {
+
+  // Sacamos los tipos del pokemon
+  let types = []
+  for (let i = 0; i < pokemon.types.length; i++) {
+    CARDCOLORS.forEach((pokType) => {
+      if (pokType.type === pokemon.types[i].type.name) {
+        let n = {
+          type: pokemon.types[i].type.name,
+          color: pokType.color
+        }
+        types.push(n)
+      }
+    })
+  }
+
+  // Recupera el container de las cartas
+  // let container = document.getElementById('cards-container')
+  // console.log('Im working!!')
+
+  // Crea la carta
+  let mainCard = document.createElement('div')
+  mainCard.id = pokemon.id
+  mainCard.className = 'cardN'
+  let color = types[0].color
+  mainCard.style.background = color
+
+  // Crea el header de la carta
+  let cardHeader = document.createElement('div')
+  cardHeader.className = 'card-header'
+  let pId = document.createElement('p')
+  pId.id = `card-${pokemon.id}`
+  pId.innerText = deleteZero(pokemon.id.toString())
+  // let pImg = document.createElement('img').id = `card-img-${pokemon.id}`
+  let pImg = new Image()
+  let newSprite = {
+    id: pokemon.id,
+    url: pokemon.sprites.front_default,
+    color: color,
+    name: pokemon.name
+  }
+  SPRITES.push(newSprite)
+  pImg.setAttribute('src', pokemon.sprites.other['official-artwork'].front_default)
+  pImg.setAttribute('alt', pokemon.name)
+  let pHP = document.createElement('p')
+  pHP.id = `card-hp-${pokemon.id}`
+  pHP.innerText = "HP " + pokemon.stats[0].base_stat.toString()
+
+  // Insertamos los elementos creados al header
+  cardHeader.appendChild(pId)
+  cardHeader.appendChild(pImg)
+  cardHeader.appendChild(pHP)
+
+  // Ingresamos el header a la carta
+  mainCard.appendChild(cardHeader)
+
+  // Creamos el contenedor de la información del pokemon
+  let pokemonInfo = document.createElement('div')
+  pokemonInfo.id = `pokemonInfo-${pokemon.id}`
+  pokemonInfo.className = 'pokemon-info'
+  let nameContainer = document.createElement('div')
+  nameContainer.className = 'name'
+
+  // Creamos e insertamos el div del nombre
+  let pokemonName = document.createElement('p')
+  pokemonName.id = pokemon.name
+  pokemonName.innerText = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)
+  nameContainer.appendChild(pokemonName)
+  pokemonInfo.appendChild(nameContainer)
+
+  // Creamos e insertamos el div de stats
+  let statsLabelContainer = document.createElement('div')
+  statsLabelContainer.className = 'label-stats'
+  let statsLabel = document.createElement('p')
+  statsLabel.innerText = 'Stats'
+  statsLabelContainer.appendChild(statsLabel)
+  pokemonInfo.appendChild(statsLabelContainer)
+
+  let statsLabelADSContainer = document.createElement('div')
+  statsLabelADSContainer.className = 'label-stats-ADS'
+  let statsLabelA = document.createElement('p')
+  statsLabelA.innerText = 'Attack'
+  let statsLabelD = document.createElement('p')
+  statsLabelD.innerText = 'Defense'
+  let statsLabelS = document.createElement('p')
+  statsLabelS.innerText = 'Speed'
+  statsLabelADSContainer.appendChild(statsLabelA)
+  statsLabelADSContainer.appendChild(statsLabelD)
+  statsLabelADSContainer.appendChild(statsLabelS)
+  pokemonInfo.appendChild(statsLabelADSContainer)
+
+  // Creamos e insertamos los stats del pokemon
+  let stats = document.createElement('div')
+  stats.className = 'stats'
+  let statA = document.createElement('p')
+  statA.innerText = pokemon.stats[1].base_stat.toString()
+  let statD = document.createElement('p')
+  statD.innerText = pokemon.stats[2].base_stat.toString()
+  let statS = document.createElement('p')
+  statS.innerText = pokemon.stats[5].base_stat.toString()
+  stats.appendChild(statA)
+  stats.appendChild(statD)
+  stats.appendChild(statS)
+  pokemonInfo.appendChild(stats)
+
+  // Creamos la primera línea
+  let fLine = document.createElement('div')
+  fLine.className = 'line'
+  pokemonInfo.appendChild(fLine)
+
+  // Creamos el label de type
+  let typeLabelContainer = document.createElement('div')
+  typeLabelContainer.className = 'label-stats'
+  let typeLabel = document.createElement('p')
+  typeLabel.innerText = 'Type'
+  typeLabelContainer.appendChild(typeLabel)
+  pokemonInfo.appendChild(typeLabelContainer)
+
+  //Creamos el div de types
+  let tyContainer = document.createElement('div')
+  tyContainer.className = 'flex-type'
+  for (let i = 0; i < types.length; i++) {
+    let newP = document.createElement('p')
+    newP.className = 'type'
+    newP.innerText = types[i].type.charAt(0).toUpperCase() + types[i].type.slice(1)
+    newP.style.color = '#FFFFFF'
+    newP.style.background = types[i].color
+    tyContainer.appendChild(newP)
+  }
+  pokemonInfo.appendChild(tyContainer)
+
+  // Creamos la segunda línea
+  let sLine = document.createElement('div')
+  sLine.className = 'line'
+  pokemonInfo.appendChild(sLine)
+
+  // Creamos weight y height
+  let whContainer = document.createElement('div')
+  whContainer.className = 'info'
+  let whLabel = document.createElement('div')
+  whLabel.className = 'info-label'
+  let wP = document.createElement('p')
+  wP.innerText = 'Weight'
+  let hP = document.createElement('p')
+  hP.innerText = 'Height'
+  whLabel.appendChild(wP)
+  whLabel.appendChild(hP)
+  whContainer.appendChild(whLabel)
+  let dataContainer = document.createElement('div')
+  dataContainer.className = 'info-data'
+  let weight = document.createElement('p')
+  weight.innerText = `${(pokemon.weight / 10).toString()} kg`
+  let height = document.createElement('p')
+  height.innerText = `${(pokemon.height / 10).toString()} m`
+  dataContainer.appendChild(weight)
+  dataContainer.appendChild(height)
+  whContainer.appendChild(dataContainer)
+  pokemonInfo.appendChild(whContainer)
+
+  mainCard.appendChild(pokemonInfo)
+  mainCard.addEventListener('click', handleMoveCards)
+
+  // Insertamos todo al contenedor de la tarjeta
+  // container.appendChild(mainCard)
+
+  return [mainCard, color]
 }

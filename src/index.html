@@ -14,54 +14,36 @@
     <div class="navbar">
       <img src="svg/pokemon-23.svg" alt="pokemon logo" width="249"/>
     </div>
-      <form action="" class="search" onsubmit="handleClick(event)">
+      <form action="" class="search" onsubmit="handleNewClick(event)">
         <label for="GET-pokemon">Type a pokemon</label>
         <input id="GET-pokemon" autocomplete="off" type="text" name="name">
         <ul id="autoCompleteList" class="list"></ul>
         <input id="submit" type="submit" value="Find">
       </form>
-    <div class="card" id="card-color">
-      <div class="card-header">
-        <p id="card-id"></p>
-        <img id="card-img" src="" alt=""/>
-        <p id="card-hp"></p>
+      <div id="mobile-arrows" class="mobile-arrows-hide">
+        <button id="previous-button" class="arrow-button" onclick="handleMobileButtons(event)">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-narrow-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 12l14 0" />
+            <path d="M5 12l4 4" />
+            <path d="M5 12l4 -4" />
+          </svg>
+          <img id="default-sprite-p" />
+          <p id="previous-pokemon"></p>
+        </button>
+        <button id="next-button" class="arrow-button" onclick="handleMobileButtons(event)">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-narrow-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 12l14 0" />
+            <path d="M15 16l4 -4" />
+            <path d="M15 8l4 4" />
+          </svg>
+          <img id="default-sprite-n" />
+          <p id="next-pokemon"></p>
+        </button>
       </div>
-      <div class="grey">
-        <div class="name">
-          <p id="name"></p>
-        </div>
-        <div class="label-stats">
-          <p>Stats</p>
-        </div>
-        <div class="label-stats-ADS">
-          <p>Attack</p>
-          <p>Defense</p>
-          <p>Speed</p>
-        </div>
-        <div class="stats">
-          <p id="attack"></p>
-          <p id="defense"></p>
-          <p id="speed"></p>
-        </div>
-        <div class="line"></div>
-        <div class="label-stats">
-          <p>Type</p>
-        </div>
-        <div class="flex-type" id="types">
-        </div>
-        <div class="line"></div>
-        <div class="info">
-          <div class="info-label">
-            <p>Weight</p>
-            <p>Height</p>
-          </div>
-          <div class="info-data">
-            <p id="weight"></p>
-            <p id="height"></p>
-          </div>
-        </div>
+      <div id="cards-container" class="cards-container-style">
       </div>
-    </div>
     <div class="footer">
       <p>Powered by&nbsp;</p>
       <img src="https://res.cloudinary.com/dfnqqumsc/image/upload/v1673288746/Portfolio/Pokemon%20finder/pokeapi_256.3fa72200.jpg" alt="pokeapi logo" id="pokeapi"/>
