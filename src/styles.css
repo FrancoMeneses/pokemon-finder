@@ -114,12 +114,16 @@ body {
 }
 
 .card-header p {
-  padding: 0;
+  padding: 2px;
   margin: 0px 1.5px 0px 1.5px;
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
   line-height: 27px;
+}
+
+.hp {
+  text-align: center;
 }
 
 .card-header img {
