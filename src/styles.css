@@ -313,6 +313,18 @@ body {
   display: none;
 }
 
+.mobile-arrows-show-first {
+  display: none;
+}
+
+.hide-btn {
+  display: none;
+}
+
+.arrow-button {
+  display: none;
+}
+
 @media (max-width: 640px) {
   .previousCard{
     display: none;
@@ -337,6 +349,13 @@ body {
   .mobile-arrows-show {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    width: 90%;
+  }
+
+  .mobile-arrows-show-first {
+    display: flex;
+    justify-content: end;
     align-items: center;
     width: 90%;
   }
